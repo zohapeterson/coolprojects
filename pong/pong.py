@@ -9,13 +9,13 @@ ball_radius = 10
 paddle_height, paddle_width = 10, 30
 paddle_speed = 5
 paddle_yconst = 350
-game_speed = 10
+game_speed = 15
 
 ## Create Classes/Objects
 class Ball:
     def __init__(self, xpos, ypos):
         self.score = 0
-        self.ball_speed = 2
+        self.ball_speed = 3
         self.xpos = xpos
         self.ypos = ypos
         self.ball = canvas.create_oval(self.xpos, self.ypos, self.xpos + ball_radius, self.ypos + ball_radius, fill="#ffffff")
@@ -75,7 +75,7 @@ class Paddle:
             self.xmove = 0
 
 def checkBallCollision(game_ball):
-    if (((game_ball.xpos + ball_radius / 2) >= game_paddle.xpos) and ((game_ball.xpos + ball_radius / 2) <= (game_paddle.xpos + paddle_width)) and ((game_ball.ypos + ball_radius) >= game_paddle.ypos)):
+    if (((game_ball.xpos + ball_radius / 2) >= game_paddle.xpos) and ((game_ball.xpos + ball_radius / 2) <= (game_paddle.xpos + paddle_width)) and (int(game_ball.ypos + ball_radius) == game_paddle.ypos)):
         game_ball.yvel = game_ball.yvel * -1
         game_ball.score = game_ball.score + 1
 
