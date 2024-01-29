@@ -3,7 +3,7 @@ from random import *
 
 ## Relevant variables
 window = Tk()
-game_height, game_width = 600, 400
+game_height, game_width = 500, 250
 game_bg = "#000000"
 block_size = game_width / 10
 score = 0
@@ -22,117 +22,75 @@ def drawBackgroundGrid():
         x1, y1 = game_width, y0 + block_size
         canvas.create_rectangle(x0, y0, x1, y1, fill="", outline="#FFFFFF")
 
-## Create types of objects
-class I_shape:
-    def __init__(self, xpos, ypos):
+## Create objects
+class Block:
+    def __init__(self, xpos, ypos, type):
         self.xpos = xpos
         self.ypos = ypos
-        self.type = "I"
+        self.type = type
         self.body = self.createBody()
-        
+    
     def createBody(self):
-        x0, y0 = self.xpos, self.ypos
-        x1, y1 = (self.xpos + block_size), (self.ypos + 4 * block_size)
-        return canvas.create_rectangle(x0, y0, x1, y1, fill="red", outline="white", width=1)
-
-class J_shape:
-    def __init__(self, xpos, ypos):
-        self.xpos = xpos
-        self.ypos = ypos
-        self.type = "J"
-        self.body = self.createBody()
+        if(self.type == "I"):
+            x0, y0 = self.xpos, self.ypos
+            x1, y1 = (self.xpos + block_size), (self.ypos + 4 * block_size)
+            return canvas.create_rectangle(x0, y0, x1, y1, fill="red", outline="white", width=1)
         
-    def createBody(self):
-        x0, y0 = self.xpos, self.ypos
-        x1, y1 = (self.xpos + block_size), (self.ypos)
-        x2, y2 = (self.xpos + block_size), (self.ypos + 3 * block_size)
-        x3, y3 = (self.xpos - block_size), (self.ypos + 3 * block_size)
-        x4, y4 = (self.xpos - block_size), (self.ypos + 2 * block_size)
-        x5, y5 = (self.xpos), (self.ypos + 2 * block_size)
-        return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, fill="blue", outline="white", width=1)
-
-class L_shape:
-    def __init__(self, xpos, ypos):
-        self.xpos = xpos
-        self.ypos = ypos
-        self.type = "L"
-        self.body = self.createBody()
+        elif(self.type == "O"):
+            x0, y0 = self.xpos, self.ypos
+            x1, y1 = (x0 + 2 * block_size), (y0 + 2 * block_size)
+            return canvas.create_rectangle(x0, y0, x1, y1, fill="purple", outline="white", width=1)
         
-    def createBody(self):
-        x0, y0 = self.xpos, self.ypos
-        x1, y1 = (self.xpos + block_size), (self.ypos)
-        x2, y2 = (self.xpos + block_size), (self.ypos + 2 * block_size)
-        x3, y3 = (self.xpos + 2 * block_size), (self.ypos + 2 * block_size)
-        x4, y4 = (self.xpos + 2 * block_size), (self.ypos + 3 * block_size)
-        x5, y5 = (self.xpos), (self.ypos + 3 * block_size)
-        return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, fill="indigo", outline="white", width=1)
-
-class O_shape:
-    def __init__(self, xpos, ypos):
-        self.xpos = xpos
-        self.ypos = ypos
-        self.ID = "O"
-        self.body = self.createBody()
+        elif(self.type == "L"):
+            x0, y0 = self.xpos, self.ypos
+            x1, y1 = (self.xpos + block_size), (self.ypos)
+            x2, y2 = (self.xpos + block_size), (self.ypos + 2 * block_size)
+            x3, y3 = (self.xpos + 2 * block_size), (self.ypos + 2 * block_size)
+            x4, y4 = (self.xpos + 2 * block_size), (self.ypos + 3 * block_size)
+            x5, y5 = (self.xpos), (self.ypos + 3 * block_size)
+            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, fill="indigo", outline="white", width=1)
         
-    def createBody(self):
-        x0, y0 = self.xpos, self.ypos
-        x1, y1 = (x0 + 2 * block_size), (y0 + 2 * block_size)
-        return canvas.create_rectangle(x0, y0, x1, y1, fill="purple", outline="white", width=1)
-
-class S_shape:
-    def __init__(self, xpos, ypos):
-        self.xpos = xpos
-        self.ypos = ypos
-        self.type = "S"
-        self.body = self.createBody()
+        elif(self.type == "T"):
+            x0, y0 = self.xpos, self.ypos
+            x1, y1 = (self.xpos + block_size), (self.ypos)
+            x2, y2 = (self.xpos + block_size), (self.ypos + block_size)
+            x3, y3 = (self.xpos + 2 * block_size), (self.ypos + block_size)
+            x4, y4 = (self.xpos + 2 * block_size), (self.ypos + 2 * block_size)
+            x5, y5 = (self.xpos - block_size), (self.ypos + 2 * block_size)
+            x6, y6 = (self.xpos - block_size), (self.ypos + block_size)
+            x7, y7 = (self.xpos), (self.ypos + block_size)
+            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="yellow", outline="white", width=1)
         
-    def createBody(self):
-        x0, y0 = self.xpos, self.ypos
-        x1, y1 = (self.xpos + 2 * block_size), (self.ypos)
-        x2, y2 = (self.xpos + 2 * block_size), (self.ypos + block_size)
-        x3, y3 = (self.xpos + block_size), (self.ypos + block_size)
-        x4, y4 = (self.xpos + block_size), (self.ypos + 2 * block_size)
-        x5, y5 = (self.xpos - block_size), (self.ypos + 2 * block_size)
-        x6, y6 = (self.xpos - block_size), (self.ypos + block_size)
-        x7, y7 = (self.xpos), (self.ypos + block_size)
-        return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="pink", outline="white", width=1)
-
-class T_shape:
-    def __init__(self, xpos, ypos):
-        self.xpos = xpos
-        self.ypos = ypos
-        self.type = "T"
-        self.body = self.createBody()
+        elif(self.type == "Z"):
+            x0, y0 = self.xpos, self.ypos
+            x1, y1 = (self.xpos + 2 * block_size), (self.ypos)
+            x2, y2 = (self.xpos + 2 * block_size), (self.ypos + block_size)
+            x3, y3 = (self.xpos + 3 * block_size), (self.ypos + block_size)
+            x4, y4 = (self.xpos + 3 * block_size), (self.ypos + 2 * block_size)
+            x5, y5 = (self.xpos + block_size), (self.ypos + 2 * block_size)
+            x6, y6 = (self.xpos + block_size), (self.ypos + block_size)
+            x7, y7 = (self.xpos), (self.ypos + block_size)
+            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="orange", outline="white", width=1)
         
-    def createBody(self):
-        x0, y0 = self.xpos, self.ypos
-        x1, y1 = (self.xpos + block_size), (self.ypos)
-        x2, y2 = (self.xpos + block_size), (self.ypos + block_size)
-        x3, y3 = (self.xpos + 2 * block_size), (self.ypos + block_size)
-        x4, y4 = (self.xpos + 2 * block_size), (self.ypos + 2 * block_size)
-        x5, y5 = (self.xpos - block_size), (self.ypos + 2 * block_size)
-        x6, y6 = (self.xpos - block_size), (self.ypos + block_size)
-        x7, y7 = (self.xpos), (self.ypos + block_size)
-        return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="yellow", outline="white", width=1)
-
-class Z_shape:
-    def __init__(self, xpos, ypos):
-        self.xpos = xpos
-        self.ypos = ypos
-        self.type = "Z"
-        self.body = self.createBody()
+        elif(self.type == "S"):
+            x0, y0 = self.xpos, self.ypos
+            x1, y1 = (self.xpos + 2 * block_size), (self.ypos)
+            x2, y2 = (self.xpos + 2 * block_size), (self.ypos + block_size)
+            x3, y3 = (self.xpos + block_size), (self.ypos + block_size)
+            x4, y4 = (self.xpos + block_size), (self.ypos + 2 * block_size)
+            x5, y5 = (self.xpos - block_size), (self.ypos + 2 * block_size)
+            x6, y6 = (self.xpos - block_size), (self.ypos + block_size)
+            x7, y7 = (self.xpos), (self.ypos + block_size)
+            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="pink", outline="white", width=1)
         
-    def createBody(self):
-        x0, y0 = self.xpos, self.ypos
-        x1, y1 = (self.xpos + 2 * block_size), (self.ypos)
-        x2, y2 = (self.xpos + 2 * block_size), (self.ypos + block_size)
-        x3, y3 = (self.xpos + 3 * block_size), (self.ypos + block_size)
-        x4, y4 = (self.xpos + 3 * block_size), (self.ypos + 2 * block_size)
-        x5, y5 = (self.xpos + block_size), (self.ypos + 2 * block_size)
-        x6, y6 = (self.xpos + block_size), (self.ypos + block_size)
-        x7, y7 = (self.xpos), (self.ypos + block_size)
-        return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="orange", outline="white", width=1)
-
+        elif(self.type == "J"):
+            x0, y0 = self.xpos, self.ypos
+            x1, y1 = (self.xpos + block_size), (self.ypos)
+            x2, y2 = (self.xpos + block_size), (self.ypos + 3 * block_size)
+            x3, y3 = (self.xpos - block_size), (self.ypos + 3 * block_size)
+            x4, y4 = (self.xpos - block_size), (self.ypos + 2 * block_size)
+            x5, y5 = (self.xpos), (self.ypos + 2 * block_size)
+            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, fill="blue", outline="white", width=1)
 
 ## Set up GUI -- create window and canvas on top
 window.title("Tetris")
