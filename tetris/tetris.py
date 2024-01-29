@@ -7,7 +7,7 @@ game_height, game_width = 500, 250
 game_bg = "#000000"
 block_size = game_width / 10
 score = 0
-blocks = []
+tetriminos = []
 
 ## Relevant Functions
 # Draw the background grid
@@ -23,74 +23,87 @@ def drawBackgroundGrid():
         canvas.create_rectangle(x0, y0, x1, y1, fill="", outline="#FFFFFF")
 
 ## Create objects
-class Block:
+class Tetrimino:
     def __init__(self, xpos, ypos, type):
         self.xpos = xpos
         self.ypos = ypos
         self.type = type
-        self.body = self.createBody()
+        self.squares = []
+        self.points = []
+        
+        self.createBody()
     
     def createBody(self):
         if(self.type == "I"):
-            x0, y0 = self.xpos, self.ypos
-            x1, y1 = (self.xpos + block_size), (self.ypos + 4 * block_size)
-            return canvas.create_rectangle(x0, y0, x1, y1, fill="red", outline="white", width=1)
+            self.points.append([self.xpos, self.ypos])
+            self.points.append([self.xpos, (self.ypos + block_size)])
+            self.points.append([self.xpos, (self.ypos + 2 * block_size)])
+            self.points.append([self.xpos, (self.ypos + 3 * block_size)])
+            
+            for i in range(4):
+                self.squares.append(Block(self.points[i][0], self.points[i][1], "red"))
         
         elif(self.type == "O"):
-            x0, y0 = self.xpos, self.ypos
-            x1, y1 = (x0 + 2 * block_size), (y0 + 2 * block_size)
-            return canvas.create_rectangle(x0, y0, x1, y1, fill="purple", outline="white", width=1)
+            self.points.append([self.xpos, self.ypos])
+            self.points.append([self.xpos, (self.ypos + block_size)])
+            self.points.append([(self.xpos + block_size), self.ypos])
+            self.points.append([(self.xpos + block_size), (self.ypos + block_size)])
+            
+            for i in range(4):
+                self.squares.append(Block(self.points[i][0], self.points[i][1], "blue"))
         
         elif(self.type == "L"):
-            x0, y0 = self.xpos, self.ypos
-            x1, y1 = (self.xpos + block_size), (self.ypos)
-            x2, y2 = (self.xpos + block_size), (self.ypos + 2 * block_size)
-            x3, y3 = (self.xpos + 2 * block_size), (self.ypos + 2 * block_size)
-            x4, y4 = (self.xpos + 2 * block_size), (self.ypos + 3 * block_size)
-            x5, y5 = (self.xpos), (self.ypos + 3 * block_size)
-            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, fill="indigo", outline="white", width=1)
-        
+            self.points.append([self.xpos, self.ypos])
+            self.points.append([self.xpos, (self.ypos + block_size)])
+            self.points.append([self.xpos, (self.ypos + 2 * block_size)])
+            self.points.append([(self.xpos + block_size), (self.ypos + 2 * block_size)])
+            
+            for i in range(4):
+                self.squares.append(Block(self.points[i][0], self.points[i][1], "green"))
+
         elif(self.type == "T"):
-            x0, y0 = self.xpos, self.ypos
-            x1, y1 = (self.xpos + block_size), (self.ypos)
-            x2, y2 = (self.xpos + block_size), (self.ypos + block_size)
-            x3, y3 = (self.xpos + 2 * block_size), (self.ypos + block_size)
-            x4, y4 = (self.xpos + 2 * block_size), (self.ypos + 2 * block_size)
-            x5, y5 = (self.xpos - block_size), (self.ypos + 2 * block_size)
-            x6, y6 = (self.xpos - block_size), (self.ypos + block_size)
-            x7, y7 = (self.xpos), (self.ypos + block_size)
-            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="yellow", outline="white", width=1)
+            self.points.append([self.xpos, self.ypos])
+            self.points.append([self.xpos, (self.ypos + block_size)])
+            self.points.append([(self.xpos - block_size), (self.ypos + block_size)])
+            self.points.append([(self.xpos + block_size), (self.ypos + block_size)])
+            
+            for i in range(4):
+                self.squares.append(Block(self.points[i][0], self.points[i][1], "yellow"))
         
         elif(self.type == "Z"):
-            x0, y0 = self.xpos, self.ypos
-            x1, y1 = (self.xpos + 2 * block_size), (self.ypos)
-            x2, y2 = (self.xpos + 2 * block_size), (self.ypos + block_size)
-            x3, y3 = (self.xpos + 3 * block_size), (self.ypos + block_size)
-            x4, y4 = (self.xpos + 3 * block_size), (self.ypos + 2 * block_size)
-            x5, y5 = (self.xpos + block_size), (self.ypos + 2 * block_size)
-            x6, y6 = (self.xpos + block_size), (self.ypos + block_size)
-            x7, y7 = (self.xpos), (self.ypos + block_size)
-            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="orange", outline="white", width=1)
+            self.points.append([self.xpos, self.ypos])
+            self.points.append([(self.xpos + block_size), self.ypos])
+            self.points.append([(self.xpos + block_size), (self.ypos + block_size)])
+            self.points.append([(self.xpos + 2 * block_size), (self.ypos + block_size)])
+            
+            for i in range(4):
+                self.squares.append(Block(self.points[i][0], self.points[i][1], "orange"))
         
         elif(self.type == "S"):
-            x0, y0 = self.xpos, self.ypos
-            x1, y1 = (self.xpos + 2 * block_size), (self.ypos)
-            x2, y2 = (self.xpos + 2 * block_size), (self.ypos + block_size)
-            x3, y3 = (self.xpos + block_size), (self.ypos + block_size)
-            x4, y4 = (self.xpos + block_size), (self.ypos + 2 * block_size)
-            x5, y5 = (self.xpos - block_size), (self.ypos + 2 * block_size)
-            x6, y6 = (self.xpos - block_size), (self.ypos + block_size)
-            x7, y7 = (self.xpos), (self.ypos + block_size)
-            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, fill="pink", outline="white", width=1)
+            self.points.append([self.xpos, self.ypos])
+            self.points.append([(self.xpos + block_size), self.ypos])
+            self.points.append([(self.xpos), (self.ypos + block_size)])
+            self.points.append([(self.xpos - block_size), (self.ypos + block_size)])
+            
+            for i in range(4):
+                self.squares.append(Block(self.points[i][0], self.points[i][1], "purple"))
         
         elif(self.type == "J"):
-            x0, y0 = self.xpos, self.ypos
-            x1, y1 = (self.xpos + block_size), (self.ypos)
-            x2, y2 = (self.xpos + block_size), (self.ypos + 3 * block_size)
-            x3, y3 = (self.xpos - block_size), (self.ypos + 3 * block_size)
-            x4, y4 = (self.xpos - block_size), (self.ypos + 2 * block_size)
-            x5, y5 = (self.xpos), (self.ypos + 2 * block_size)
-            return canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, fill="blue", outline="white", width=1)
+            self.points.append([self.xpos, self.ypos])
+            self.points.append([self.xpos, (self.ypos + block_size)])
+            self.points.append([self.xpos, (self.ypos + 2 * block_size)])
+            self.points.append([(self.xpos - block_size), (self.ypos + 2 * block_size)])
+            
+            for i in range(4):
+                self.squares.append(Block(self.points[i][0], self.points[i][1], "pink"))
+
+class Block:
+    def __init__(self, xpos, ypos, color):
+        self.xpos = xpos
+        self.ypos = ypos
+        self.color = color
+        self.block_body = canvas.create_rectangle(self.xpos, self.ypos, self.xpos + block_size, self.ypos + block_size, fill=self.color, outline="white", width=1)
+    
 
 ## Set up GUI -- create window and canvas on top
 window.title("Tetris")
@@ -103,6 +116,7 @@ canvas.pack()
 drawBackgroundGrid()
 
 ## Run game
+tetro = Tetrimino(block_size, block_size, "S")
 
 # Starts loop and event listener
 window.mainloop()
