@@ -14,12 +14,12 @@ blocks = []
 def drawBackgroundGrid():
     for i in range(0, game_width, int(block_size)):
         x0, y0 = i, 0
-        x1, y1 = (x0 + block_size), (game_height - 1)
+        x1, y1 = (x0 + block_size), game_height
         canvas.create_rectangle(x0, y0, x1, y1, fill="", outline="#FFFFFF")
     
     for j in range(0, game_height, int(block_size)):
         x0, y0 = 0, j
-        x1, y1 = (game_width - 1), y0 + block_size
+        x1, y1 = game_width, y0 + block_size
         canvas.create_rectangle(x0, y0, x1, y1, fill="", outline="#FFFFFF")
 
 ## Create types of objects
