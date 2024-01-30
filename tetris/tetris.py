@@ -5,9 +5,10 @@ from random import *
 window = Tk()
 game_height, game_width = 500, 250
 game_bg = "#000000"
-block_size = game_width / 10
+block_size = block_speed = game_width / 10
 score = 0
 tetriminos = []
+tetriminos_type = ["I", "J", "S", "Z", "L", "O", "T"]
 
 ## Relevant Functions
 # Draw the background grid
@@ -22,6 +23,9 @@ def drawBackgroundGrid():
         x1, y1 = game_width, y0 + block_size
         canvas.create_rectangle(x0, y0, x1, y1, fill="", outline="#FFFFFF")
 
+def randomTetriminos():
+    return choice(tetriminos_type)
+
 ## Create objects
 class Tetrimino:
     def __init__(self, xpos, ypos, type):
@@ -31,7 +35,11 @@ class Tetrimino:
         self.squares = []
         self.points = []
         
+        self.setColor()
         self.createBody()
+
+        for i in range(4):
+            self.squares.append(Block(self.points[i][0], self.points[i][1], self.color))
     
     def createBody(self):
         if(self.type == "I"):
@@ -40,63 +48,63 @@ class Tetrimino:
             self.points.append([self.xpos, (self.ypos + 2 * block_size)])
             self.points.append([self.xpos, (self.ypos + 3 * block_size)])
             
-            for i in range(4):
-                self.squares.append(Block(self.points[i][0], self.points[i][1], "red"))
-        
         elif(self.type == "O"):
             self.points.append([self.xpos, self.ypos])
             self.points.append([self.xpos, (self.ypos + block_size)])
             self.points.append([(self.xpos + block_size), self.ypos])
             self.points.append([(self.xpos + block_size), (self.ypos + block_size)])
-            
-            for i in range(4):
-                self.squares.append(Block(self.points[i][0], self.points[i][1], "blue"))
         
         elif(self.type == "L"):
             self.points.append([self.xpos, self.ypos])
             self.points.append([self.xpos, (self.ypos + block_size)])
             self.points.append([self.xpos, (self.ypos + 2 * block_size)])
             self.points.append([(self.xpos + block_size), (self.ypos + 2 * block_size)])
-            
-            for i in range(4):
-                self.squares.append(Block(self.points[i][0], self.points[i][1], "green"))
 
         elif(self.type == "T"):
             self.points.append([self.xpos, self.ypos])
             self.points.append([self.xpos, (self.ypos + block_size)])
             self.points.append([(self.xpos - block_size), (self.ypos + block_size)])
             self.points.append([(self.xpos + block_size), (self.ypos + block_size)])
-            
-            for i in range(4):
-                self.squares.append(Block(self.points[i][0], self.points[i][1], "yellow"))
         
         elif(self.type == "Z"):
             self.points.append([self.xpos, self.ypos])
             self.points.append([(self.xpos + block_size), self.ypos])
             self.points.append([(self.xpos + block_size), (self.ypos + block_size)])
             self.points.append([(self.xpos + 2 * block_size), (self.ypos + block_size)])
-            
-            for i in range(4):
-                self.squares.append(Block(self.points[i][0], self.points[i][1], "orange"))
         
         elif(self.type == "S"):
             self.points.append([self.xpos, self.ypos])
             self.points.append([(self.xpos + block_size), self.ypos])
             self.points.append([(self.xpos), (self.ypos + block_size)])
             self.points.append([(self.xpos - block_size), (self.ypos + block_size)])
-            
-            for i in range(4):
-                self.squares.append(Block(self.points[i][0], self.points[i][1], "purple"))
         
         elif(self.type == "J"):
             self.points.append([self.xpos, self.ypos])
             self.points.append([self.xpos, (self.ypos + block_size)])
             self.points.append([self.xpos, (self.ypos + 2 * block_size)])
             self.points.append([(self.xpos - block_size), (self.ypos + 2 * block_size)])
-            
-            for i in range(4):
-                self.squares.append(Block(self.points[i][0], self.points[i][1], "pink"))
+    
+    def setColor(self):
+        if(self.type == "I"):
+            self.color = "red"
 
+        elif(self.type == "J"):
+            self.color = "blue"
+
+        elif(self.type == "S"):
+            self.color = "yellow"
+
+        elif(self.type == "Z"):
+            self.color = "orange"
+
+        elif(self.type == "T"):
+            self.color = "green"
+
+        elif(self.type == "L"):
+            self.color = "purple"
+
+        elif(self.type == "O"):
+            self.color = "pink"
 class Block:
     def __init__(self, xpos, ypos, color):
         self.xpos = xpos
@@ -104,7 +112,6 @@ class Block:
         self.color = color
         self.block_body = canvas.create_rectangle(self.xpos, self.ypos, self.xpos + block_size, self.ypos + block_size, fill=self.color, outline="white", width=1)
     
-
 ## Set up GUI -- create window and canvas on top
 window.title("Tetris")
 window.geometry(str(game_width)+"x"+str(game_height))
@@ -116,7 +123,7 @@ canvas.pack()
 drawBackgroundGrid()
 
 ## Run game
-tetro = Tetrimino(block_size, block_size, "S")
+tetro = Tetrimino(block_size, block_size, randomTetriminos())
 
 # Starts loop and event listener
 window.mainloop()
