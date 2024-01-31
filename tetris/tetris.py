@@ -25,10 +25,31 @@ def randomTetriminos():
 def randomOrientation():
     return randint(0, 3)
 
+def checkBreak():
+    row_num = 0
+    occupied = [0] * 20
+    for a in range(0, game_height, int(block_size)):
+        for b in range(0, game_width, int(block_size)):    
+            for i in range(0, len(tetriminos)):
+                for j in range(0, len(tetriminos[i].points)):
+                    if(tetriminos[i].points[j][0] == b and tetriminos[i].points[j][1] == a and tetriminos[i].active == 0):
+                        # print("Hello")
+                        # print(a)
+                        occupied[row_num] += 1
+        row_num += 1
+    
+    for i in range(0, len(occupied)):
+        if(occupied[i] == 10):
+            # print("Row " + str(i) + " needs to be cleared.")
+            pass
+
+    occupied = [0] * 20
+        
 def main():
+    checkBreak()
     activeTetrimino = tetriminos[len(tetriminos) - 1]
     if(activeTetrimino.checkBottom()):
-        tetriminos.append(Tetrimino(block_size, block_size, "L", 0))
+        tetriminos.append(Tetrimino(block_size, block_size, randomTetriminos(), randomOrientation()))
         activeTetrimino = tetriminos[len(tetriminos) - 1]
 
     canvas.bind("<Up>", activeTetrimino.rotate)
@@ -151,11 +172,11 @@ class Tetrimino:
                 x2, y2 = (self.xpos), (self.ypos - block_size)
                 x3, y3 = (self.xpos - block_size), (self.ypos - block_size)
             elif(self.orientation == 1):
-                x1, y1 = (self.xpos), (self.ypos + block_size)
+                x1, y1 = (self.xpos), (self.ypos - block_size)
                 x2, y2 = (self.xpos - block_size), (self.ypos)
-                x3, y3 = (self.xpos - block_size), (self.ypos - block_size)
+                x3, y3 = (self.xpos - block_size), (self.ypos + block_size)
             elif(self.orientation == 2):
-                x1, y1 = (self.xpos + block_size), (self.ypos)
+                x1, y1 = (self.xpos - block_size), (self.ypos)
                 x2, y2 = (self.xpos + block_size), (self.ypos + block_size)
                 x3, y3 = (self.xpos), (self.ypos + block_size)
             elif(self.orientation == 3):
@@ -175,11 +196,11 @@ class Tetrimino:
             elif(self.orientation == 2):
                 x1, y1 = (self.xpos + block_size), self.ypos
                 x2, y2 = (self.xpos), (self.ypos + block_size)
-                x3, y3 = (self.xpos - block_size), (self.ypos - block_size)
+                x3, y3 = (self.xpos - block_size), (self.ypos + block_size)
             elif(self.orientation == 3):
-                x1, y1 = (self.xpos), self.ypos + block_size
-                x2, y2 = (self.xpos - block_size), (self.ypos)
-                x3, y3 = (self.xpos - block_size), (self.ypos - block_size)
+                x1, y1 = (self.xpos - block_size), self.ypos
+                x2, y2 = (self.xpos - block_size), (self.ypos - block_size)
+                x3, y3 = (self.xpos), (self.ypos + block_size)
         
         elif(self.type == "J"):
             if(self.orientation == 0):
@@ -294,7 +315,6 @@ class Block:
         canvas.coords(self.block_body, self.xpos, self.ypos, self.xpos + block_size, self.ypos + block_size)
 class BackgroundBlock:
     def __init__(self, xpos, ypos):
-        self.occupied = 0
         self.xpos = xpos
         self.ypos = ypos
         self.bg_blockBody = canvas.create_rectangle(self.xpos, self.ypos, self.xpos + block_size, self.ypos + block_size, fill="", outline="#FFFFFF")
@@ -310,7 +330,8 @@ canvas.pack()
 drawBackgroundGrid()
 
 ## Run game
-tetriminos.append(Tetrimino(3*block_size, block_size, "L", 0))
+# tetriminos.append(Tetrimino(3*block_size, block_size, "Z", 0))
+tetriminos.append(Tetrimino(3*block_size, block_size, randomTetriminos(), randomOrientation()))
 main()
 
 # Starts loop and event listener
