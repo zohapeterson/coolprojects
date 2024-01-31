@@ -38,10 +38,17 @@ def checkBreak():
                         occupied[row_num] += 1
         row_num += 1
     
-    for i in range(0, len(occupied)):
+    for i in range(len(occupied)):
         if(occupied[i] == 10):
-            # print("Row " + str(i) + " needs to be cleared.")
-            pass
+            for j in range(0, int(game_width), int(block_size)):
+                # print("row: " + str(i * 25) + ", col: " + str(j))
+                for k in range(len(tetriminos)):
+                    for l in range(len(tetriminos[k].points)):
+                        if(tetriminos[k].points[l][0] == j and tetriminos[k].points[l][1] == (i*25)):
+                            # print("Remove. Row: " + str(i*25) + ", Col: " + str(j))
+                            pass
+                    
+            # print("Row " + str(i * 25) + " needs to be cleared.")
 
     occupied = [0] * 20
         
